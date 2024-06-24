@@ -10,9 +10,37 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_06_10_093358) do
+ActiveRecord::Schema[7.1].define(version: 2024_06_24_154027) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "bookings", force: :cascade do |t|
+    t.date "check_in"
+    t.date "check_out"
+    t.string "status"
+    t.bigint "user_id", null: false
+    t.bigint "flat_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["flat_id"], name: "index_bookings_on_flat_id"
+    t.index ["user_id"], name: "index_bookings_on_user_id"
+  end
+
+  create_table "features", force: :cascade do |t|
+    t.string "name"
+    t.binary "icon"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "flat_features", force: :cascade do |t|
+    t.bigint "flat_id", null: false
+    t.bigint "feature_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["feature_id"], name: "index_flat_features_on_feature_id"
+    t.index ["flat_id"], name: "index_flat_features_on_flat_id"
+  end
 
   create_table "flats", force: :cascade do |t|
     t.string "title"
@@ -24,6 +52,17 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_10_093358) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_flats_on_user_id"
+  end
+
+  create_table "reviews", force: :cascade do |t|
+    t.string "content"
+    t.float "rating"
+    t.bigint "user_id", null: false
+    t.bigint "booking_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["booking_id"], name: "index_reviews_on_booking_id"
+    t.index ["user_id"], name: "index_reviews_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -40,5 +79,11 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_10_093358) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "bookings", "flats"
+  add_foreign_key "bookings", "users"
+  add_foreign_key "flat_features", "features"
+  add_foreign_key "flat_features", "flats"
   add_foreign_key "flats", "users"
+  add_foreign_key "reviews", "bookings"
+  add_foreign_key "reviews", "users"
 end
