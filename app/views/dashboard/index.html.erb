@@ -1,0 +1,12 @@
+<h1>My Bookings</h1>
+
+
+<ul>
+<% @bookings.each do |booking| %>
+<h2><%= booking.flat.title %></h2>
+<li>Booking name: <%= "#{booking.user.first_name} #{booking.user.last_name}" %></li>
+<li>Check-in date: <%= booking.check_in %></li>
+<li>Check-out date:<%= booking.check_out %></li>
+<li>Status:<%= booking.status%></li>
+<% end %>
+</ul>

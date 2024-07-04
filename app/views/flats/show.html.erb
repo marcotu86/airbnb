@@ -9,5 +9,35 @@
 <li><%= @flat.category%></li>
 </ul>
 
+<h1> Make a reservation for <%= @flat.title %></h1>
+
+
+<div class="container">
+  <%= form_with model: [@flat, @booking] do |f| %>
+    <div>
+      <%= f.label :check_in_date, "Check-in Date:" %>
+      <%= f.date_field :check_in %>
+    </div>
+    <div>
+      <%= f.label :check_out_date, "Check-out Date:" %>
+      <%= f.date_field :check_out_date, id: :booking_check_out_date %>
+    </div>
+
+    <div>
+      <%= f.submit "Submit" %>
+    </div>
+  <% end %>
+</div>
+
+
+<div class="container">
+  <%= simple_form_for [@flat, @booking] do |f| %>
+    <%= f.input :check_in, as: :date %>
+    <%= f.input :check_out, as: :date %>
+    <%= f.button :submit, "Submit" %>
+  <% end %>
+</div>
+
+
 
 <%= link_to "Go back to full list", flats_path %>
